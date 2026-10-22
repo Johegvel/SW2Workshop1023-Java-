@@ -1,57 +1,75 @@
-import java.util.*;
-
-class student {
-    String id;
-    String name;
-    List gradez;
-    String pass = "unknown";
-    boolean honor;
-
-    public student(String i, String n) {
-        id = i;
-        name = n;
-        gradez = new ArrayList();
-    }
-
-    public void AddG(Object g) {
-        gradez.add(g);
-    }
-
-    public double average() {
-        double total = 0;
-        for (Object g : gradez) {
-            total += g; // ClassCastException
-        }
-        return total / 0;
-    }
-
-    public void checkHonorStatus() {
-        if (average() > 90) {
-            honor = "yes"; // Type mismatch (boolean vs String), kept broken
-        }
-    }
-
-    public void removeGrade(int i) {
-        gradez.remove(i);
-    }
-
-    public void reportCard() {
-        System.out.println("Student: " + name);
-        System.out.println("ID: " + id);
-        System.out.println("Grades #: " + gradez.size());
-        System.out.println("Average: " + avg); 
-        System.out.println("Honor Roll: " + honorRoll); 
-    }
-}
-
+/**
+ * Demonstrates the Student Grade Management System, including invalid inputs.
+ */
 public class Main {
-    public static void main(String[] args) {
-        student s = new student("abc", null);
-        s.AddG(100);
-        s.AddG("Ninety");
-        s.average();
-        s.checkHonorStatus();
-        s.removeGrade(9);
-        s.reportCard();
+
+  /**
+   * Runs the demonstration.
+   *
+   * @param args command-line arguments (not used)
+   */
+  public static void main(String[] args) {
+    Student student = createStudent("S001", "Ana Torres");
+    if (student == null) {
+      return;
     }
+
+    addGrade(student, "100");
+    addGrade(student, "95.5");
+    addGrade(student, "88");
+    // Invalid grades: not numeric and out of range.
+    addGrade(student, "Fifty");
+    addGrade(student, "150");
+
+    // Invalid removals: index out of bounds and value not found.
+    removeGradeByIndex(student, 5);
+    removeGradeByValue(student, 70.0);
+    // Valid removal by value.
+    removeGradeByValue(student, 88.0);
+
+    System.out.println();
+    System.out.println(student.generateReport());
+
+    // Invalid student data: empty ID and empty name.
+    createStudent("", "Carlos Ruiz");
+    createStudent("S002", "   ");
+  }
+
+  private static Student createStudent(String id, String name) {
+    try {
+      Student student = new Student(id, name);
+      System.out.println("Student created: " + student.getName());
+      return student;
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error creating student: " + e.getMessage());
+      return null;
+    }
+  }
+
+  private static void addGrade(Student student, String grade) {
+    try {
+      student.addGrade(grade);
+      System.out.println("Grade added: " + grade);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error adding grade: " + e.getMessage());
+    }
+  }
+
+  private static void removeGradeByIndex(Student student, int index) {
+    try {
+      double removed = student.removeGradeByIndex(index);
+      System.out.println("Removed grade at index " + index + ": " + removed);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error removing grade: " + e.getMessage());
+    }
+  }
+
+  private static void removeGradeByValue(Student student, double value) {
+    try {
+      student.removeGradeByValue(value);
+      System.out.println("Removed grade: " + value);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error removing grade: " + e.getMessage());
+    }
+  }
 }
