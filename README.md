@@ -37,14 +37,9 @@ SW2Workshop1023-Java-/
 ├── .github/
 │   └── workflows/
 │       └── checkstyles.yml
-├── src/
-│   └── main/
-│       └── java/
-│           └── com/
-│               └── workshop/
-│                   ├── Main.java
-│                   └── Student.java
-├── checkstyle-14.3.0-all.jar
+├── Main.java
+│── Student.java
+├── checkstylet-result.txt
 └── README.md
 ```
 
